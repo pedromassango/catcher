@@ -7,12 +7,16 @@ import 'package:flame/text_config.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+const double _maxSpeed = 120.0*2;
+double _maxDelayTimeBeforeAddOtherBox = 1.0;
+double _minDelayTimeBeforeAddOtherBox = 0.0;
+
 double _speed = 120.0;
 const double _circleRadius = 15;
 
 Offset _circlePosition;
 int _score = 0;
-double _delayTimeBeforeAddOtherBox = 1;
+double _delayTimeBeforeAddOtherBox = _maxDelayTimeBeforeAddOtherBox;
 
 const whiteColor = Color(0xFFf7f4f7);
 const blueColor = Color(0xFF01f5ab);
@@ -22,14 +26,19 @@ const barColor = Color(0xFF131725);
 final random = Random();
 
 void speedUpGame() {
-  _delayTimeBeforeAddOtherBox -= 0.0005;
-  _speed += 0.7;
+  _delayTimeBeforeAddOtherBox -= 0.005;
+  _speed += 0.5;
+
+  print("Speed: $_speed\nDelay: $_delayTimeBeforeAddOtherBox\n\n");
 }
 
 void resetGameSpeed() {
   _speed = 120;
-  _delayTimeBeforeAddOtherBox = 1;
+  _delayTimeBeforeAddOtherBox = _maxDelayTimeBeforeAddOtherBox;
 }
+
+void resetBoxDelayTime() => (_delayTimeBeforeAddOtherBox = _maxDelayTimeBeforeAddOtherBox);
+void resetSpeed() => (_speed = _maxSpeed);
 
 void restartGame() {
   resetGameSpeed();
@@ -85,22 +94,23 @@ class GamePad extends BaseGame {
     creationTime += t;
 
     // If reached the max speed then reset the game speed
-    if(_delayTimeBeforeAddOtherBox <= 0 || _speed >= 250) {
+    if(_speed >= _maxSpeed) {
       resetGameSpeed();
+    }else if(_delayTimeBeforeAddOtherBox <= _minDelayTimeBeforeAddOtherBox) {
+      resetBoxDelayTime();
     }
 
     if (creationTime >= _delayTimeBeforeAddOtherBox) {
       creationTime = 0;
-      SquareComponent newSquare;
-
+      SquareComponent square;
       if (_generateGreenBox(whiteBoxCount)) {
         whiteBoxCount = 0;
-        newSquare = SquareComponent(_screenDimension, true);
+        square = SquareComponent(_screenDimension, true);
       } else {
         whiteBoxCount++;
-        newSquare = SquareComponent(_screenDimension, false);
+        square = SquareComponent(_screenDimension, false);
       }
-      add(newSquare);
+      add(square);
     }
   }
 }
@@ -168,12 +178,13 @@ class SquareComponent extends PositionComponent {
   void update(double t) {
     y += t * _speed;
 
+    // update the
     switch (direction) {
       case Direction.left:
-        x -= 0.88;
+        x -= 0.85;
         break;
       case Direction.right:
-        x += 0.88;
+        x += 0.85;
         break;
     }
 
