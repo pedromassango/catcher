@@ -7,7 +7,7 @@ import 'package:flame/text_config.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-const double _maxSpeed = 120.0*2;
+const double _maxSpeed = 120.0 * 2;
 double _maxDelayTimeBeforeAddOtherBox = 1.0;
 double _minDelayTimeBeforeAddOtherBox = 0.0;
 
@@ -46,7 +46,7 @@ void restartGame() {
 }
 
 class GamePad extends BaseGame {
-  Size _screenDimension;
+  final Size _screenDimension;
   static const TextConfig _textConfig =
   TextConfig(color: whiteColor, fontSize: 52);
 
