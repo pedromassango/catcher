@@ -1,4 +1,4 @@
-import 'package:catcher/src/game/game_pad.dart';
+import 'package:catcher/src/game_pad.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
